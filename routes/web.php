@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\admin\HomeController;
@@ -19,6 +21,28 @@ use App\Http\Controllers\admin\ProductSubCategoryController;
 Route::get('/',[FrontController::class,'index'])->name('front.home');
 Route::get('/shop/{ctaegorySlug?}/{subCategorySlug?}',[ShopController::class,'index'])->name('front.shop');
 Route::get('/product/{slug}',[ShopController::class,'product'])->name("front.product");
+Route::get('/cart',[CartController::class,'cart'])->name("front.cart");
+Route::post('/addtocart',[CartController::class,'addToCart'])->name("front.addToCart");
+Route::post('/updatecart',[CartController::class,'updateCart'])->name("front.updateCart");
+Route::post('/deleteItem',[CartController::class,'deleteItem'])->name("front.deleteItem.cart");
+Route::get('/checkout',[CartController::class,'checkOut'])->name("front.checkout");
+Route::post('/processcheckout',[CartController::class,'processCheckout'])->name("front.processCheckout");
+Route::get('/thanks/{orderId}',[CartController::class,'thankyou'])->name("front.thanks");
+//User Registration
+
+Route::group(['prefix'=>'account'],function(){
+    Route::group(['middleware'=>'guest'],function(){
+        Route::get('/register',[AuthController::class,'register'])->name('account.register');
+        Route::post('/process-register',[AuthController::class,'processRegister'])->name('account.processRegister');
+        Route::get('/login',[AuthController::class,'logIn'])->name('account.login');
+        Route::post('/login',[AuthController::class,'authenticate'])->name('account.authenticate');
+       
+    });
+    Route::group(['middleware'=>'auth'],function(){
+        Route::get('/profile',[AuthController::class,'profile'])->name('account.profile');
+        Route::get('/logout',[AuthController::class,'logOut'])->name('account.logout');
+    });
+});
 
 
 Route::group(['prefix'=>'admin'],function(){
@@ -63,7 +87,7 @@ Route::group(['prefix'=>'admin'],function(){
         Route::delete('/products/{products}',[ProductController::class,'destroy'])->name('products.delete');
 
         Route::get('/product-subcategories',[ProductSubCategoryController::class,'index'])->name('product-subcategories.index');
-
+        Route::get('/get-products',[ProductController::class,'getProducts'])->name('products.getProducts');
         //Create Temp-Image
         Route::post('/upload-temp-image',[TempImagesController::class,'create'])->name('temp-images.create');
 

@@ -57,8 +57,10 @@
                     
                     <h2 class="price ">${{ $product->price }}</h2>
 
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Perferendis officiis dolor aut nihil iste porro ullam repellendus inventore voluptatem nam veritatis exercitationem doloribus voluptates dolorem nobis voluptatum qui, minus facere.</p>
-                    <a href="cart.php" class="btn btn-dark"><i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART</a>
+                        <p>
+                        {!! $product->short_description !!}
+                        </p>
+                    <a href="javascript:void(0);" onclick="addToCart({{ $product->id }})" class="btn btn-dark"><i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART</a>
                 </div>
             </div>
 
@@ -84,7 +86,9 @@
                             </p>
                         </div>
                         <div class="tab-pane fade" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit, incidunt blanditiis suscipit quidem magnam doloribus earum hic exercitationem. Distinctio dicta veritatis alias delectus quaerat, quam sint ab nulla aperiam commodi. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit, incidunt blanditiis suscipit quidem magnam doloribus earum hic exercitationem. Distinctio dicta veritatis alias delectus quaerat, quam sint ab nulla aperiam commodi. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit, incidunt blanditiis suscipit quidem magnam doloribus earum hic exercitationem. Distinctio dicta veritatis alias delectus quaerat, quam sint ab nulla aperiam commodi.</p>
+                            <p>
+                            {!! $product->shipping_returns !!}
+                            </p>
                         </div>
                         <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                         
@@ -95,6 +99,56 @@
         </div>           
     </div>
 </section>
-
 <section class="pt-5 section-8">
+    @if(!empty($relatedProducts))
+    <div class="container">
+        <div class="section-title">
+            <h2>Related Products</h2>
+        </div> 
+        <div class="col-md-12">
+            <div id="related-products" class="carousel">
+                
+                @foreach ($relatedProducts as $relatedProduct)
+                @php
+                $relatedProductImage = $relatedProduct->product_image->first();
+            @endphp
+                
+                <div class="card product-card">
+                    <div class="product-image position-relative">
+                        <a href="" class="product-img">
+                            @if (!empty($productImage->image))
+                            <img class="card-img-top" src="{{ asset('temp/'.$relatedProductImage->image) }}" width="50" >
+                            @else
+                            <img src="{{ asset('admin-assets/img/default-150x150.png') }}" width="50" >
+                            @endif
+                        </a>
+                        <a class="whishlist" href="222"><i class="far fa-heart"></i></a>                            
+
+                        <div class="product-action">
+                            <a class="btn btn-dark" href="javascript:void(0);" onclick="addToCart({{ $product->id }})">
+                                <i class="fa fa-shopping-cart"></i> Add To Cart
+                            </a>                            
+                        </div>
+                    </div>                        
+                    <div class="card-body text-center mt-3">
+                        <a class="h6 link" href="">{{ $relatedProduct->title }}</a>
+                        <div class="price mt-2">
+                            <span class="h5"><strong>${{ $relatedProduct->price }}</strong></span>
+                            @if ($relatedProduct->compare_price > 0)
+                            <span class="h6 text-underline"><del>${{ $relatedProduct->compare_price }}</del></span>
+                            @endif
+                            
+                        </div>
+                    </div>                        
+                </div> 
+                @endforeach
+               
+            </div>
+        </div>
+    </div>
+    @endif
+</section>
+@endsection
+@section('customJS')
+
 @endsection

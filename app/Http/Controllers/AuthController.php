@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -68,6 +69,7 @@ class AuthController extends Controller
     }
     public function logOut(){
         Auth::logout();
+        Cart::destroy();
         return redirect()->route('account.login')->with('success','Successfully Logged out');
     }
 }

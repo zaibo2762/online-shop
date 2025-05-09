@@ -129,6 +129,10 @@
                             <div class="h6"><strong>Subtotal</strong></div>
                             <div class="h6"><strong>${{ Cart::subtotal() }}</strong></div>
                         </div>
+                        <div class="d-flex justify-content-between summery-end">
+                            <div class="h6"><strong>Discount</strong></div>
+                            <div class="h6"><strong id="discount_value">${{ $discount }}</strong></div>
+                        </div>
                         <div class="d-flex justify-content-between mt-2">
                             <div class="h6"><strong>Shipping</strong></div>
                             <div class="h6"><strong id="shippingAmount">${{ number_format($totalShippingCharge,2) }}</strong></div>
@@ -139,12 +143,27 @@
                         </div>                            
                     </div>
                 </div>   
+
+                <div class="input-group apply-coupan mt-4">
+                    <input name="discount_code" id="discount_code" type="text" placeholder="Coupon Code" class="form-control">
+                    <button class="btn btn-dark" type="button" id="apply_discount">Apply Coupon</button>
+                </div> 
+                <div id='discount-response-wrapper'>
+                    @if (Session::has('code'))
+                    <div class="mt-4" id="discount-response">
+                       <strong> {{ Session::get('code')->code }} </strong>
+                       <a class="btn btn-danger btn-sm" id="remove_discount"><i class="fa fa-times"></i></a>
+                    </div> 
+                    @endif
+                </div>
+               
+               
                
                 <div class="card payment-form ">
                     <h3 class="card-title h5 mb-3">Payment Methods</h3>
                     <div >
                         <input checked type="radio" name="payment_method" id="payment_1" value="cod">
-                        <label  for="payment_1" class="form-check-label">Cash On Delivery</label>
+                        <label   for="payment_1" class="form-check-label">Cash On Delivery</label>
                     </div>  
                     <div >
                         <input type="radio" name="payment_method" id="payment_2" value="cod">
@@ -241,6 +260,43 @@
                         $('#shippingAmount').html('$'+response.shippingCharge)
                         $('#grandTotal').html('$'+response.grandtotal)
                     }
+                }
+            });
+        })
+
+        $('#apply_discount').click(function(){
+            $.ajax({
+                url:'{{ route('front.applydiscount') }}',
+                type:'post',
+                data:{code: $("#discount_code").val(),country_id: $('#country').val()},
+                dataType: 'json',
+                success: function(response){
+                   if(response.status == true){
+                    $('#shippingAmount').html('$'+response.shippingCharge)
+                    $('#discount_value').html('$'+response.discount)
+                    $('#grandTotal').html('$'+response.grandtotal)
+                    $('#discount-response-wrapper').html(response.discountString)
+                   }else{
+                        $('#discount-response-wrapper').html("<span class='text-danger'>"+response.message+"</span>")
+                   }
+                }
+            });
+        })
+        $('body').on('click','#remove_discount',function(){
+            $.ajax({
+                url:'{{ route('front.removediscount') }}',
+                type:'post',
+                data:{country_id: $('#country').val()},
+                dataType: 'json',
+                success: function(response){
+                   if(response.status == true){
+                    $('#shippingAmount').html('$'+response.shippingCharge)
+                    $('#discount_value').html('$'+response.discount)
+                    $('#grandTotal').html('$'+response.grandtotal)
+                    $('#grandTotal').html('$'+response.grandtotal)
+                    $('#discount-response').html('')
+                    $('#discount_code').val('')
+                   }
                 }
             });
         })

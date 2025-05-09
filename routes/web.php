@@ -31,6 +31,8 @@ Route::get('/checkout',[CartController::class,'checkOut'])->name("front.checkout
 Route::post('/processcheckout',[CartController::class,'processCheckout'])->name("front.processCheckout");
 Route::get('/thanks/{orderId}',[CartController::class,'thankyou'])->name("front.thanks");
 Route::post('/get-order-summary',[CartController::class,'getOrderSummary'])->name("front.ordersummary");
+Route::post('/apply-discount',[CartController::class,'applyDiscount'])->name("front.applydiscount");
+Route::post('/remove-discount',[CartController::class,'removeCoupon'])->name("front.removediscount");
 //User Registration
 
 Route::group(['prefix'=>'account'],function(){
@@ -100,12 +102,10 @@ Route::group(['prefix'=>'admin'],function(){
         Route::get('/coupon',[DiscountCodeController::class,'index'])->name('coupons.index');
         Route::get('/coupons/create',[DiscountCodeController::class,'create'])->name('coupons.create');
         Route::post('/coupons',[DiscountCodeController::class,'store'])->name('coupons.store');
-        // Route::get('/products/{products}/edit',[ProductController::class,'edit'])->name('products.edit');
-        // Route::put('/products/{products}',[ProductController::class,'update'])->name('products.update');
-        // Route::delete('/products/{products}',[ProductController::class,'destroy'])->name('products.delete');
-        // Route::get('/product-subcategories',[ProductSubCategoryController::class,'index'])->name('product-subcategories.index');
-        // Route::get('/get-products',[ProductController::class,'getProducts'])->name('products.getProducts');
-
+        Route::get('/coupons/{coupon}/edit',[DiscountCodeController::class,'edit'])->name('coupons.edit');
+        Route::put('/coupons/{coupon}',[DiscountCodeController::class,'update'])->name('coupons.update');
+        Route::delete('/coupons/{coupons}',[DiscountCodeController::class,'destroy'])->name('coupons.delete');
+       
 
 
         //Create Temp-Image

@@ -228,7 +228,7 @@ class CartController extends Controller
             //calculate Shipping
             $shiping = 0;
             $discount = 0;
-            $discountCodeId = '';
+            $discountCodeId = NULL;
             $promoCode = '';
             $subtotal = Cart::subtotal(2,'.','');
             $discount = 0;
@@ -274,6 +274,8 @@ class CartController extends Controller
             $order->discount = $discount;
             $order->coupon_code_id = $discountCodeId;
             $order->coupon_code = $promoCode;
+            $order->payment_status = 'not paid';
+            $order->status = 'pending';
             $order->user_id = $user->id;
             $order->first_name = $request->first_name;
             $order->last_name = $request->last_name;
@@ -302,6 +304,9 @@ class CartController extends Controller
             $orderitem->total = $item->price*$item->qty;
             $orderitem->save();
         }
+        //send order email
+        orderEmail($order->id);
+        
         Cart::destroy();
         session()->forget('code');
         session()->flash('success','you have successfully placed your order');

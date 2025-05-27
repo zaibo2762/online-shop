@@ -39,6 +39,10 @@ class ShopController extends Controller
             $products = $products->whereIn('brand_id',$brandsArray);
         }
 
+        if(!empty($request->get('search'))){
+            $products = $products->where('title','LIKE','%'.$request->get('search') ."%");
+        }
+
         $products->orderBy('id', 'DESC');
         $products = $products->paginate(6);
         
@@ -61,7 +65,7 @@ class ShopController extends Controller
        $relatedProducts = [];
        if($product->related_products != ''){
            $productArray = explode(',',$product->related_products );
-           $relatedProducts = Product::whereIn('id',$productArray)->with('product_image')->get();
+           $relatedProducts = Product::whereIn('id',$productArray)->where('status',1)->with('product_image')->get();
        }
 
        $data['product'] = $product;

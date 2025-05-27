@@ -45,4 +45,14 @@ class OrderController extends Controller
 
 
     }
+    public function sendInvoiceEmail(Request $request,$id){
+
+        orderEmail($id, $request->userType);
+         session()->flash('status','Order email send successfully');
+        return response()->json([
+            'status' => true,
+            'message' => 'order email send succesfully'
+        ]);
+
+    }
 }

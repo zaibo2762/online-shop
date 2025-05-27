@@ -61,12 +61,12 @@
 					<a href=" {{ route('account.login') }}" class="nav-link text-dark">LogIn / Register</a>
 				@endif
 				
-				<form action="">					
+				<form action="{{ route('front.shop') }}">					
 					<div class="input-group">
-						<input type="text" placeholder="Search For Products" class="form-control" aria-label="Amount (to the nearest dollar)">
-						<span class="input-group-text">
+						<input type="text" value="{{ Request::get('search') }}" placeholder="Search For Products" class="form-control" name="search">
+						<button type="submit" class="input-group-text">
 							<i class="fa fa-search"></i>
-					  	</span>
+					  	</button>
 					</div>
 				</form>
 			</div>		
@@ -171,6 +171,27 @@
 		</div>
 	</div>
 </footer>
+
+<!-- Wishlist Modal -->
+
+<div class="modal fade" id="wishlistModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script src="{{ asset('front-assets/js/jquery-3.6.0.min.js') }}"></script>
 <script src="{{ asset('front-assets/js/bootstrap.bundle.5.1.3.min.js') }}"></script>
 <script src="{{ asset('front-assets/js/instantpages.5.1.0.min.js') }}"></script>
@@ -195,7 +216,7 @@ $.ajaxSetup({
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				}
 			});
-			function addToCart(id){
+		function addToCart(id){
         $.ajax({
             url: '{{ route('front.addToCart') }}',
             type: 'post',
@@ -210,6 +231,22 @@ $.ajaxSetup({
             }
         })
     }
+	function addToWishlist(id){
+		$.ajax({
+            url: '{{ route('front.addToWishlist') }}',
+            type: 'post',
+            data:{id:id},
+            dataType:'json',
+            success:function(response){
+                if(response.status == true){
+					$("#wishlistModal .modal-body").html(response.message)
+                    $("#wishlistModal").modal('show')
+                }else{
+                   window.location.href = "{{ route('account.login') }}"
+                }
+            }
+        })
+	}
 </script>
 @yield('customJS')
 </body>

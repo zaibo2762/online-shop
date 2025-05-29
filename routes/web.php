@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\admin\HomeController;
+use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\ProductController;
@@ -58,6 +59,8 @@ Route::group(['prefix'=>'account'],function(){
     });
     Route::group(['middleware'=>'auth'],function(){
         Route::get('/profile',[AuthController::class,'profile'])->name('account.profile');
+        Route::post('/update-profile',[AuthController::class,'updateProfile'])->name('account.updateProfile');
+        Route::post('/update-address',[AuthController::class,'updateAddress'])->name('account.updateAddress');
         Route::get('/myorders',[AuthController::class,'orders'])->name('account.myorders');
         Route::get('/orderdetail/{orderId}',[AuthController::class,'orderDetail'])->name('account.orderDetail');
         Route::get('/logout',[AuthController::class,'logOut'])->name('account.logout');
@@ -129,6 +132,13 @@ Route::group(['prefix'=>'admin'],function(){
          Route::post('/orders/change-status/{id}',[OrderController::class,'changeOrderStatus'])->name('orders.changeOrderStatus');
          Route::post('/orders/send-email/{id}',[OrderController::class,'sendInvoiceEmail'])->name('orders.sendInvoiceEmail');
        
+        //user routes
+        Route::get('/users',[UserController::class,'index'])->name('users.index');
+         Route::get('/users/create',[UserController::class,'create'])->name('users.create');
+         Route::get('/users/{users}/edit',[UserController::class,'edit'])->name('users.edit');
+        Route::put('/users/{users}',[UserController::class,'update'])->name('users.update');
+         Route::post('/users',[UserController::class,'store'])->name('users.store');
+        Route::delete('/users/{users}',[UserController::class,'destroy'])->name('users.delete');
 
 
         //Create Temp-Image

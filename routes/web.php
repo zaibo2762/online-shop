@@ -7,10 +7,12 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\admin\HomeController;
+use App\Http\Controllers\admin\PageController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\AdminLoginController;
@@ -47,8 +49,10 @@ Route::post('/apply-discount',[CartController::class,'applyDiscount'])->name("fr
 Route::post('/remove-discount',[CartController::class,'removeCoupon'])->name("front.removediscount");
 //wishlist routes
 Route::post('/add-to-wishlist',[FrontController::class,'addToWishlist'])->name("front.addToWishlist");
-//User Registration
+//Static Pages
+Route::get('/page/{slug}',[FrontController::class,'page'])->name("front.page");
 
+//User Registration
 Route::group(['prefix'=>'account'],function(){
     Route::group(['middleware'=>'guest'],function(){
         Route::get('/register',[AuthController::class,'register'])->name('account.register');
@@ -59,6 +63,8 @@ Route::group(['prefix'=>'account'],function(){
     });
     Route::group(['middleware'=>'auth'],function(){
         Route::get('/profile',[AuthController::class,'profile'])->name('account.profile');
+        Route::get('/change-password',[AuthController::class,'showChangePasswordForm'])->name('account.changePassword');
+        Route::post('/process-change-password',[AuthController::class,'changePassword'])->name('account.processChangePassword');
         Route::post('/update-profile',[AuthController::class,'updateProfile'])->name('account.updateProfile');
         Route::post('/update-address',[AuthController::class,'updateAddress'])->name('account.updateAddress');
         Route::get('/myorders',[AuthController::class,'orders'])->name('account.myorders');
@@ -139,8 +145,17 @@ Route::group(['prefix'=>'admin'],function(){
         Route::put('/users/{users}',[UserController::class,'update'])->name('users.update');
          Route::post('/users',[UserController::class,'store'])->name('users.store');
         Route::delete('/users/{users}',[UserController::class,'destroy'])->name('users.delete');
+        //page routes
+        Route::get('/pages',[PageController::class,'index'])->name('pages.index');
+        Route::get('/pages/create',[PageController::class,'create'])->name('pages.create');
+        Route::get('/pages/{pages}/edit',[PageController::class,'edit'])->name('pages.edit');
+        Route::put('/pages/{pages}',[PageController::class,'update'])->name('pages.update');
+        Route::post('/pages',[PageController::class,'store'])->name('pages.store');
+        Route::delete('/pages/{pages}',[PageController::class,'destroy'])->name('pages.delete');
 
-
+        //settings routes
+         Route::get('/change-password',[SettingController::class,'showChangePasswordForm'])->name('admin.showChangePasswordForm');
+         Route::post('/process-change-password',[SettingController::class,'processChangePassword'])->name('admin.processChangePassword');
         //Create Temp-Image
         Route::post('/upload-temp-image',[TempImagesController::class,'create'])->name('temp-images.create');
 

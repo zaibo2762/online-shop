@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Page;
 use App\Models\Order;
 use App\Mail\OrderEmail;
 use App\Models\Category;
@@ -32,5 +33,9 @@ use Illuminate\Support\Facades\Mail;
 
         Mail::to($email)->send(new OrderEmail($mailData));
         
+    }
+    function staticPages(){
+      $page = Page::orderBy('name','ASC')->get();
+      return $page;
     }
 ?>

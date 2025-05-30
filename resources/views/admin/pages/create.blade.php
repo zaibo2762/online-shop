@@ -4,10 +4,10 @@
     <div class="container-fluid my-2">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Create Category</h1>
+                <h1>Create Page</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ route('categories.index') }}" class="btn btn-primary">Back</a>
+                <a href="{{ route('pages.index') }}" class="btn btn-primary">Back</a>
             </div>
         </div>
     </div>
@@ -17,7 +17,7 @@
 <section class="content">
     <!-- Default box -->
     <div class="container-fluid">
-        <form action="" method="post" id="categoryForm" name="categoryForm">
+        <form action="" method="post" id="pageForm" name="pageForm">
             
         <div class="card">
             <div class="card-body">								
@@ -38,47 +38,22 @@
                         </div>
                        
                     </div>	
-                    <div class="col-md-6">
-                    <div class="mb-3">
-                        <input type="hidden" name="image_id" id="image_id" value=''>
-                    <label for="image">Image</label>  
-                    <div id="image" class="dropzone dz-clickable">
-                        <div class="dz-message needsclick">    
-                            <br>Drop files here or click to upload.<br><br>                                            
-                        </div>
-                    </div>  
-                    </div>    
-                    </div>								
-                    <div class="col-md-6">
+                   	 <div class="col-md-12">
                         <div class="mb-3">
-                            <label for="status">Status</label>
-                            <select name="status" id="status" class="form-control">
-                                <option value="1">Active</option>	
-                            <option value="0">Block</option>
-                            </select>
-                            	
-                        </div>
-                    </div>									
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="showHome">Show On Home</label>
-                            <select name="showHome" id="showHome" class="form-control">
-                                <option value="Yes">Yes</option>	
-                            <option value="No">No</option>
-                            </select>
-                            	
-                        </div>
-                    </div>									
+                            <label for="content">Content</label>
+                            <textarea name="content" id="content" class="summernote" cols="30" rows="10"></textarea>
+                        </div>								
+                    </div>     		
+                   						
                 </div>
             </div>							
         </div>
    
-       
-    </div>
-     <div class="pb-5 pt-3">
+        <div class="pb-5 pt-3">
             <button type="submit" class="btn btn-primary">Create</button>
-            <a href="{{ route('categories.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
+            <a href="{{ route('pages.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
         </div>
+    </div>
 </form>
     <!-- /.card -->
 </section>
@@ -88,20 +63,20 @@
 
 @section('customJs')
     <script>
-        $('#categoryForm').submit(function(event){
+        $('#pageForm').submit(function(event){
             event.preventDefault();
             var form = $(this); // Get the form
             var formData = form.serialize();
             $("button[type=submit]").prop('disabled',true)
             $.ajax({
-                url:'{{ route('categories.store') }}',
+                url:'{{ route('pages.store') }}',
                 type:'post',
                 data: formData,
                 dataType:'json',
                 success:function(response){
                     if(response.status == true){
                         $("button[type=submit]").prop('disabled',false)
-                        window.location.href = "{{ route('categories.index') }}";
+                        window.location.href = "{{ route('pages.index') }}";
                         $('#name').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
                         $('#slug').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
                         
@@ -149,27 +124,7 @@
 
      
 
-Dropzone.autoDiscover = false;    
-const dropzone = $("#image").dropzone({ 
-    init: function() {
-        this.on('addedfile', function(file) {
-            if (this.files.length > 1) {
-                this.removeFile(this.files[0]);
-            }
-        });
-    },
-    url:  "{{ route('temp-images.create') }}",
-    maxFiles: 1,
-    paramName: 'image',
-    addRemoveLinks: true,
-    acceptedFiles: "image/jpeg,image/png,image/gif",
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }, success: function(file, response){
-         $("#image_id").val(response.image_id);
-        //console.log(response)
-    }
-});
+
         
     </script>
 @endsection

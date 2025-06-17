@@ -133,7 +133,7 @@ class AuthController extends Controller
                 'last_name' =>$request->last_name,
                 'email' =>$request->email,
                 'mobile' =>$request->mobile,
-                'country_id' =>$request->country,
+                'country_id' =>$request->country_id ,
                 'address' =>$request->address,
                 'appartment' =>$request->appartment,
                 'state' =>$request->state,

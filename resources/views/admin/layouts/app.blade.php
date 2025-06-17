@@ -73,7 +73,7 @@
 			<!-- /.content-wrapper -->
 			<footer class="main-footer">
 				
-				<strong>Copyright &copy; 2014-2025 AmazingShop All rights reserved.
+				<strong>Copyright &copy; 2014-2025 Online Shop All rights reserved.
 			</footer>
 			
 		</div>

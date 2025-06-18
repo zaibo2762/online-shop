@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
+use App\Models\ProductRating;
+use Illuminate\Support\Facades\Validator;
 
 class ShopController extends Controller
 {
@@ -56,7 +58,8 @@ class ShopController extends Controller
         return view('front.shop',$data);
     }
     public function product($slug){
-        $product = Product::where('slug',$slug)->with('product_image')->first();
+        $product = Product::where('slug',$slug)
+            ->with(['product_image','product_ratings'])->first();
        if($product == Null){
         abort(404);
        }
@@ -72,5 +75,41 @@ class ShopController extends Controller
        $data['relatedProducts'] = $relatedProducts;
        return view("front.product",$data);
 
+    }
+    public function saveRating(Request $request,$id){
+        $validator = Validator::make($request->all(),[
+            'name' => 'required|min:10',
+            'email' => 'required|email',
+            'comment' => 'required',
+            'rating' => 'required'
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+
+        $count = ProductRating::where('email',$request->email)->count();
+        if($count > 0){
+            session()->flash('error','you already given the review');
+             return response()->json([
+                'status' => true
+            ]);
+        }
+
+        $productRating = new ProductRating;
+        $productRating->product_id = $id;
+        $productRating->username = $request->name;
+        $productRating->email = $request->email;
+        $productRating->comment = $request->comment;
+        $productRating->rating = $request->rating;
+        $productRating->status = 0;
+        $productRating->save();
+        session()->flash('success','Thanks for your review');
+         return response()->json([
+                'status' => true,
+                'message' => 'Thanks for your review'
+            ]);
     }
 }

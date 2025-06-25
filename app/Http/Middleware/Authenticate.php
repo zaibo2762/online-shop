@@ -16,12 +16,12 @@ class Authenticate
      */
     public function handle(Request $request, Closure $next): Response
     {
-       // Check if the user is authenticated
-       if (Auth::guard('web')->guest()) {
-        // Redirect to login if not authenticated
-        return redirect()->route('account.login');
-    }
+        // Check if the user is authenticated
+        if (Auth::guard('web')->guest()) {
+            // Redirect to login if not authenticated
+            return redirect()->route('account.login');
+        }
 
-    return $next($request);
+        return $next($request);
     }
 }

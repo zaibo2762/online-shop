@@ -9,14 +9,15 @@ use App\Http\Controllers\Controller;
 
 class ProductImageController extends Controller
 {
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         $tempImageInfo = TempImage::find($temp_img_id);
         $productImage = new ProductImage();
         $productImage->product_id = $request->product_id;
-        $productImage -> image = 'NULL';
+        $productImage->image = 'NULL';
         $productImage->save();
         $imageName = $tempImageInfo->name;
-        $productImage ->image = $imageName;
+        $productImage->image = $imageName;
         $productImage->save();
     }
 }

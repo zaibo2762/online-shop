@@ -27,12 +27,7 @@ use Illuminate\Support\Facades\Mail;
             'order' => $order,
             'userType' => $userType
         ];
-
-
-
-
-        Mail::to($email)->send(new OrderEmail($mailData));
-        
+        Mail::to($email)->send(new OrderEmail($mailData));  
     }
     function staticPages(){
       $page = Page::orderBy('name','ASC')->get();

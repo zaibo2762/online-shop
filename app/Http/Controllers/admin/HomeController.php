@@ -12,16 +12,17 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $totalOrders = Order::where('status', '!=', 'cancelled')->count();
         $totalProducts = Product::count();
-        $totalCustomers = User::where('role',1)->count();
+        $totalCustomers = User::where('role', 1)->count();
         $totalRevenue = Order::where('status', '!=', 'cancelled')->sum('grand_total');
         //This month revenue
-        
+
         $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
         $currentDate = Carbon::now()->format('Y-m-d');
-        $revenueThisMonth = Order::where('status','!=', 'cancelled')
+        $revenueThisMonth = Order::where('status', '!=', 'cancelled')
             ->whereDate('created_at', '>=', $startOfMonth)
             ->whereDate('created_at', '<=', $currentDate)
             ->sum('grand_total');
@@ -32,7 +33,7 @@ class HomeController extends Controller
 
         $lastMonthStart = Carbon::now()->subMonth()->startOfMonth()->format('Y-m-d');
         $lastMonthEnd = Carbon::now()->subMonth()->endOfMonth()->format('Y-m-d');
-        $revenueLastsMonth = Order::where('status','!=', 'cancelled')
+        $revenueLastsMonth = Order::where('status', '!=', 'cancelled')
             ->whereDate('created_at', '>=', $lastMonthStart)
             ->whereDate('created_at', '<=', $lastMonthEnd)
             ->sum('grand_total');
@@ -45,7 +46,7 @@ class HomeController extends Controller
             ->whereDate('created_at', '<=', $currentDate)
             ->sum('grand_total');
 
-        return view('admin.dashboard',[
+        return view('admin.dashboard', [
             'totalOrders' => $totalOrders,
             'totalProducts' => $totalProducts,
             'totalCustomers' => $totalCustomers,
@@ -55,10 +56,9 @@ class HomeController extends Controller
             'revenueLast30Days' => $revenueLast30Days,
             'lastMonthName' => $lastMonthName,
         ]);
-        // $admin = Auth::guard('admin')->user();
-        // echo 'welcome' . $admin->name. '<a href="'.route('admin.logout').'">logout</a>';
     }
-    public function logout(){
+    public function logout()
+    {
         Auth::guard('admin')->logout();
         return redirect()->route('admin.login');
     }

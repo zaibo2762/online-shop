@@ -16,7 +16,7 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
-       
+
         // Check if the user is authenticated
         if (Auth::check()) {
             // Redirect the authenticated user to the dashboard or another route
@@ -26,4 +26,3 @@ class RedirectIfAuthenticated
         return $next($request);
     }
 }
-

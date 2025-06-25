@@ -9,33 +9,32 @@ use App\Http\Controllers\Controller;
 
 class TempImagesController extends Controller
 {
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         $image = $request->image;
 
         if (!empty($image)) {
             $ext = $image->getClientOriginalExtension();
-            $newName = rand().'.'.$ext;
+            $newName = rand() . '.' . $ext;
 
             $tempImage = new TempImage();
-            $tempImage-> name = $newName;
+            $tempImage->name = $newName;
             $tempImage->save();
 
-            $image->move(public_path().'/temp',$newName);
+            $image->move(public_path() . '/temp', $newName);
             //Generate thumbnail
-            $sourcePath = public_path().'/temp/'.$newName;
-            
-           
+            $sourcePath = public_path() . '/temp/' . $newName;
+
+
 
 
             return response()->json([
                 'status' => true,
                 'image_id' => $tempImage->id,
                 'Image_url' => $sourcePath,
-                'message' =>'Image Updated Successfully'
+                'message' => 'Image Updated Successfully'
 
             ]);
         }
-
-
     }
 }

@@ -18,7 +18,7 @@ class OrderEmail extends Mailable
      */
     public function __construct($mailData)
     {
-        $this->mailData=$mailData;
+        $this->mailData = $mailData;
     }
 
     /**
@@ -36,7 +36,7 @@ class OrderEmail extends Mailable
      */
     public function content(): Content
     {
-       
+
         return new Content(
             view: 'email.order',
         );
